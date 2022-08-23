@@ -1,8 +1,10 @@
-import { Formik } from "formik";
+import axios, { AxiosError } from "axios";
+import { Field, Formik } from "formik";
 import React from "react";
 import { Link } from "react-router-dom";
 import * as Yup from 'yup'
-const Login = () => {
+import FormErrorMessageBox from "./FormErrorMessage";
+const SignUp = () => {
   const initialValues = {
     fullName: "",
     email: "",
@@ -15,8 +17,34 @@ const Login = () => {
 
   })
 
-  const onLoginSubmit=async(data:any)=>{
+  const register=(email:string,password:string,userName:string)=>{
+    axios.post('/signup',
+    {
+        email,
+        password,
+        userName
+    },
+    {
+        headers: {
+            "Content-Type": "application/json",
+          },
+    })
+  }
 
+  const onLoginSubmit=async(data:any)=>{
+       try{
+        await register(data.email,data.password,data.userName)
+        
+        
+       }catch(err){
+        if (axios.isAxiosError(err)) {
+            const error = err as AxiosError
+            const errorMessage = ""
+            throw errorMessage
+          } else {
+            throw 'error'
+          }
+       }
   }
 
   return (
@@ -45,7 +73,7 @@ const Login = () => {
                   <label className="label">
                     <span className="label-text">Full Name</span>
                   </label>
-                  <input
+                  <Field
                     type="text"
                     name="fullName"
                     autoComplete="tel"
@@ -53,12 +81,14 @@ const Login = () => {
                     className="input input-bordered"
                   />
                 </div>
+                <FormErrorMessageBox name={"fullName"}></FormErrorMessageBox>
+
 
                 <div className="form-control my-5 relative">
                   <label className="label">
                     <span className="label-text">Email Address</span>
                   </label>
-                  <input
+                  <Field
                     type="text"
                     name="email"
                     autoComplete="email"
@@ -66,30 +96,34 @@ const Login = () => {
                     className="input input-bordered "
                   />
                 </div>
+                <FormErrorMessageBox name={"email"}></FormErrorMessageBox>
+
 
                 <div className="form-control mt-5">
                   <label className="label">
                     <span className="label-text">Password</span>
                   </label>
-                  <input
+                  <Field
                     className="textarea textarea-bordered rounded-none"
                     type="password"
                     placeholder="Enter Your  Password"
                     name="password"
                   />
                 </div>
+                <FormErrorMessageBox name={"password"}></FormErrorMessageBox>
+
                 <div className="flex justify-center  w-full pt-4">
-                  <button type="submit" className="uppercase btn btn-accent ">
+                  <button type="submit" className="uppercase btn btn-accent " disabled={isSubmitting}>
                     Create Account
                   </button>
                 </div>
                 <div className="flex justify-center  w-full pt-5">
                   <label className="label">
                     <span className="label-text">
-                      Need new account{" "}
+                      Already have an account{" "}
                       {
-                        <Link className="link-secondary" to="/signup">
-                        Sign up
+                        <Link className="link-secondary" to="/login">
+                          Log In
                         </Link>
                       }
                     </span>
@@ -107,4 +141,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

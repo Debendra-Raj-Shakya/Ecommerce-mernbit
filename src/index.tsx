@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import Home from './pages/Home'
 import Login from "./pages/Auth/Login"
 import Navbar from './components/Navbar';
+import SignUp from './pages/Auth/signUp';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -23,6 +24,7 @@ root.render(
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/home" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
         
       </Routes>
     </BrowserRouter>
